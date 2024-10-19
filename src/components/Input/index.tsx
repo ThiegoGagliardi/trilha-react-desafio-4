@@ -2,7 +2,7 @@ import { InputContainer, ErrorMessage } from "./styles";
 import { IInputProps } from "././types";
 import { Controller } from "react-hook-form";
 
-const Input = ({ control, name, errorMessage, ...rest }: IInputProps) => {
+const Input = ({ control, name, errorMessage, customOnBlur, ...rest }: IInputProps) => {
   return (
     <>
       <InputContainer>
@@ -13,7 +13,10 @@ const Input = ({ control, name, errorMessage, ...rest }: IInputProps) => {
             <input
               {...rest}
               onChange={onChange}
-              onBlur={onBlur}
+              onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                onBlur(); // Chama o onBlur do React Hook Form
+                if (customOnBlur) customOnBlur(e); // Chama o seu customOnBlur, se ele existir
+              }}
               value={value}
               ref={ref}
             />

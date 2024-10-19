@@ -4,6 +4,7 @@ import Input from "../../components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+
 import { Container, LoginContainer, Column, Spacing, Title } from "./styles";
 import { defaultValues, IFormLogin } from "./types";
 
@@ -18,6 +19,26 @@ const schema = yup
   .required();
 
 const Login = () => {
+  
+  const handleOnBlur = () =>{
+
+    console.log('blured');
+
+    const button = document.getElementsByTagName('Button')[0]; 
+    
+    console.log(isValid);
+    (button as HTMLButtonElement).disabled = isValid;
+    if (isValid) {
+      button.classList.remove("desabilitado");
+      button.classList.add("habilitado");
+    } else{
+      button.classList.remove("habilitado");
+      button.classList.add("desabilitado");
+    }
+    
+    console.log(button);
+  };
+
   const {
     control,
     formState: { errors, isValid },
@@ -25,7 +46,7 @@ const Login = () => {
     resolver: yupResolver(schema),
     mode: "onBlur",
     defaultValues,
-    reValidateMode: "onChange",
+    reValidateMode: "onChange"    
   });
 
   return (
@@ -37,19 +58,21 @@ const Login = () => {
           <Input
             name="email"
             placeholder="Email"
+            customOnBlur={handleOnBlur}
             control={control}
-            errorMessage={errors?.email?.message}
+            errorMessage={errors?.email?.message}            
           />
           <Spacing />
           <Input
             name="password"
             type="password"
             placeholder="Senha"
+            customOnBlur={handleOnBlur}
             control={control}
-            errorMessage={errors?.password?.message}
+            errorMessage={errors?.password?.message}            
           />
-          <Spacing />
-          <Button title="Entrar" />
+          <Spacing />          
+          <Button title="Entrar" classType='desabilitado' isEnabled={false} />
         </Column>
       </LoginContainer>
     </Container>
